@@ -14,8 +14,8 @@
 const int WINDOWS_WIDTH = 640;
 const int WINDOWS_HEIGHT = 480;
 
-const float BG_RED = 0.1922F, BG_BLUE = 0.549f, BG_GREEN = 0.9059f;
-const float BG_OPACITY = 1.0f;
+const float BG_RED = 1.0f, BG_BLUE = 0.7f, BG_GREEN = 0.5f;
+const float BG_OPACITY = 2.0f;
 
 //Variables
 SDL_Window* display_window;
@@ -24,11 +24,13 @@ bool game_is_running = true;
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO); //Initializes our video window
     
-    display_window = SDL_CreateWindow("Hello OpenGL !",
+    display_window = SDL_CreateWindow("Welcome to Hellen Ekpo's Game!",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
                                       WINDOWS_WIDTH,
                                       WINDOWS_HEIGHT, SDL_WINDOW_OPENGL);
+    //our display window is going to be named hellen ekpos game
+    //its gonna be centered, and we are going to give it a width and height.
     SDL_GLContext context = SDL_GL_CreateContext(display_window);
     SDL_GL_MakeCurrent(display_window, context);
 #ifdef _WINDOWS
