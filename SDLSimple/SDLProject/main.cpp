@@ -15,7 +15,7 @@ const int WINDOWS_WIDTH = 640;
 const int WINDOWS_HEIGHT = 480;
 
 const float BG_RED = 1.0f, BG_BLUE = 0.7f, BG_GREEN = 0.5f;
-const float BG_OPACITY = 2.0f;
+const float BG_OPACITY = 0.05f;
 
 //Variables
 SDL_Window* display_window;
