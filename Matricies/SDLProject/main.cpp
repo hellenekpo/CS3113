@@ -195,14 +195,25 @@ void update()
 //
 //    // Update model matrix
 //    model_matrix = glm::scale(model_matrix, scale_vector);
-    LOG(++frame_counter);
+    //LOG(++frame_counter);
     //Step 1
     glm::vec3 scale_vector;
     glm::vec3 scale_vector1;
     //Step 2
     if (frame_counter >= MAX_FRAME) {
+        //is_growing = !is_growing;
+        //frame_counter = 0;
+    }
+    if (is_growing) {
+        triangle_x += 0.2 * delta_time;
+        triangle_rotate -= 90.0 * delta_time;
+    }
+    else {
+        triangle_x -= 0.2 * delta_time;
+        triangle_rotate += 90.0 * delta_time;
+    }
+    if (triangle_x >= 1.9 || triangle_x <= 0) {
         is_growing = !is_growing;
-        frame_counter = 0;
     }
     //Step 3
     scale_vector = glm::vec3(is_growing ? GROWTH_FACTOR : SHRINK_FACTOR,
@@ -212,13 +223,12 @@ void update()
     
     //Step 4
     scale_vector1 = glm::vec3(GROWTH_FACTOR, GROWTH_FACTOR, 1.0);
-    triangle_x += 0.2 * delta_time;
-    triangle_rotate += 90.0 * delta_time;
     model_matrix = glm::mat4(1.0f);
     model_matrix1 = glm::mat4(1.0f);
     model_matrix = glm::scale(model_matrix, scale_vector1);
     model_matrix1 = glm::scale(model_matrix1, scale_vector1);
     model_matrix = glm::translate(model_matrix, glm::vec3(triangle_x, 0.0f, 0.0f));
+    LOG(triangle_x);
     model_matrix = glm::rotate(model_matrix, glm::radians(triangle_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
     model_matrix1 = glm::translate(model_matrix1, glm::vec3(-triangle_x, 0.0f, 0.0f));
     model_matrix1 = glm::rotate(model_matrix1, glm::radians(-triangle_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
