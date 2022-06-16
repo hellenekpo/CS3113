@@ -17,6 +17,16 @@
 
 #define LOG(statement) std::cout << statement << '\n'
 #define STB_IMAGE_IMPLEMENTATION
+glm::vec3 player_position = glm::vec3(0.0f, 0.0f, 0.0f);
+glm::vec3 player_movement = glm::vec3(0.0f, 0.0f, 0.0f);
+
+
+enum Coordinate {
+    x_coordinate,
+    y_coordinate
+};
+
+
 
 #include "stb_image.h"
 //Our window dimensions
@@ -56,6 +66,9 @@ const float GROWTH_FACTOR = 2.5f;
 const float SHRINK_FACTOR = 0.99f;
 const int MAX_FRAME = 40;
 
+
+
+
 const float INIT_TRIANGLE_ANGLE = glm::radians(45.0); //opengl uses radians
 const float ROT_ANGLEN = glm::radians(1.5f);
 int frame_counter = 0;
@@ -86,6 +99,17 @@ float triangle_rotate = 0.0f;
 const int NUMBER_OF_TEXTURES = 1; // to be generated, that is
 const GLint LEVEL_OF_DETAIL = 0; // base image level; Level n is the nth mipmap reduction image
 const GLint TEXTURE_BORDER = 0; // this value MUST be zero
+
+float get_screen_to_ortho(float coordinate, Coordinate axis) {
+    switch(axis) {
+        case x_coordinate:
+            return ((coordinate / WINDOW_WIDTH) * 10.0) - (10.0 / 2.0);
+        case y_coordinate:
+            return (((WINDOW_HEIGHT - coordinate) / WINDOW_HEIGHT) * 7.5) - (7.5f / 2.0);
+        default:
+            return 0.0;
+    }
+}
 
 void print_matrix(glm::mat4 &matrix, int size)
 {
@@ -160,13 +184,49 @@ void initialize() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 void process_input() {
+    player_movement = glm::vec3(0.0f);
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
-            game_is_running = false;
+        switch(event.type) {
+            case SDL_WINDOWEVENT_CLOSE:
+            case SDL_QUIT:
+                game_is_running = false;
+                break;
+            
+            case SDL_KEYDOWN:
+                switch(event.key.keysym.sym) {
+                    case SDLK_RIGHT:
+                        //Move the player to the right
+                        break;
+                    case SDLK_LEFT:
+                        //Move the player to the left
+                        break;
+                    case SDLK_q:
+                        game_is_running = false;
+                    default:
+                        break;
+                }
+            default:
+                break;
         }
 
     }
+    const Uint8 *key_states = SDL_GetKeyboardState(NULL); //array of key states
+    
+    if (key_states[SDL_SCANCODE_LEFT]) {
+        player_movement.x = -1.0f;
+    }
+    else if (key_states[SDL_SCANCODE_RIGHT]) {
+        player_movement.x = 1.0f;
+    }
+    
+    if (key_states[SDL_SCANCODE_UP]) {
+        player_movement.y = 1.0f;
+    }
+    else if (key_states[SDL_SCANCODE_DOWN]) {
+        player_movement.y = -1.0f;
+    }
+    
 }
 void update()
 {
