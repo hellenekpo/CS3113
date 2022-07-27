@@ -4,11 +4,11 @@
 #define GL_GLEXT_PROTOTYPES 1
 #define FIXED_TIMESTEP 0.0166666f
 #define PLATFORM_COUNT 4
-#define ROCK_COUNT 3
-
+#define ROCK_COUNT 2
+float start_ticks = 0.0f;
 bool one = false;
 bool win;
-
+float curr_x_accel = 0.0f, curr_y_acceleration = 0.0f;
 #ifdef _WINDOWS
 #include <GL/glew.h>
 #endif
@@ -93,6 +93,8 @@ float accumulator = 0.0f;
 /**
  GENERAL FUNCTIONS
  */
+
+
 GLuint load_texture(const char* filepath)
 {
     // STEP 1: Loading the image file
@@ -123,6 +125,69 @@ GLuint load_texture(const char* filepath)
     stbi_image_free(image);
     
     return textureID;
+}
+
+void DrawText(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position, int FONTBANK_SIZE)
+{
+
+    // Scale the size of the fontbank in the UV-plane
+    // We will use this for spacing and positioning
+    float width = 1.0f / FONTBANK_SIZE;
+    float height = 1.0f / FONTBANK_SIZE;
+
+    // Instead of having a single pair of arrays, we'll have a series of pairs—one for each character
+    // Don't forget to include <vector>!
+    std::vector<float> vertices;
+    std::vector<float> texture_coordinates;
+
+    // For every character...
+    for (int i = 0; i < text.size(); i++) {
+        // 1. Get their index in the spritesheet, as well as their offset (i.e. their position
+        //    relative to the whole sentence)
+        int spritesheet_index = (int) text[i];  // ascii value of character
+        float offset = (screen_size + spacing) * i;
+        
+        // 2. Using the spritesheet index, we can calculate our U- and V-coordinates
+        float u_coordinate = (float) (spritesheet_index % FONTBANK_SIZE) / FONTBANK_SIZE;
+        float v_coordinate = (float) (spritesheet_index / FONTBANK_SIZE) / FONTBANK_SIZE;
+
+        // 3. Inset the current pair in both vectors
+        vertices.insert(vertices.end(), {
+            offset + (-0.5f * screen_size), 0.5f * screen_size,
+            offset + (-0.5f * screen_size), -0.5f * screen_size,
+            offset + (0.5f * screen_size), 0.5f * screen_size,
+            offset + (0.5f * screen_size), -0.5f * screen_size,
+            offset + (0.5f * screen_size), 0.5f * screen_size,
+            offset + (-0.5f * screen_size), -0.5f * screen_size,
+        });
+
+        texture_coordinates.insert(texture_coordinates.end(), {
+            u_coordinate, v_coordinate,
+            u_coordinate, v_coordinate + height,
+            u_coordinate + width, v_coordinate,
+            u_coordinate + width, v_coordinate + height,
+            u_coordinate + width, v_coordinate,
+            u_coordinate, v_coordinate + height,
+        });
+    }
+
+    // 4. And render all of them using the pairs
+    glm::mat4 model_matrix = glm::mat4(1.0f);
+    model_matrix = glm::translate(model_matrix, position);
+    
+    program->SetModelMatrix(model_matrix);
+    glUseProgram(program->programID);
+    
+    glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices.data());
+    glEnableVertexAttribArray(program->positionAttribute);
+    glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texture_coordinates.data());
+    glEnableVertexAttribArray(program->texCoordAttribute);
+    
+    glBindTexture(GL_TEXTURE_2D, font_texture_id);
+    glDrawArrays(GL_TRIANGLES, 0, (int) (text.size() * 6));
+    
+    glDisableVertexAttribArray(program->positionAttribute);
+    glDisableVertexAttribArray(program->texCoordAttribute);
 }
 
 void initialise()
@@ -193,7 +258,8 @@ void initialise()
         state.losing_platforms[i].set_position(glm::vec3(i-4.0f, -3.0f, 0.0f));
         state.losing_platforms[i].update(0.0f, NULL, 0);
     }
-    GLuint text_texture_id = load_texture(TEXT_PATH);
+    text_texture_id = load_texture(TEXT_PATH);
+    std::cout << "the initial" << text_texture_id << std::endl;
     // enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -203,44 +269,61 @@ void process_input()
 {
     // VERY IMPORTANT: If nothing is pressed, we don't want to go anywhere
     state.player->set_movement(glm::vec3(0.0f));
-    if (win) {
-        state.player->DrawText(&program, text_texture_id, "Mission Successful", 640, 1.0f, glm::vec3(4.0f, -3.0f, 0.0f), 16);
+
+    if (ticks >= start_ticks+1.0f) {
+        state.player->set_acceleration(glm::vec3(0.0f, -0.49f, 0.0f));
     }
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
-        switch (event.type) {
-            // End game
-            case SDL_QUIT:
-            case SDL_WINDOWEVENT_CLOSE:
-                game_is_running = false;
-                break;
-                
-            case SDL_KEYDOWN:
-                switch (event.key.keysym.sym) {
-                    case SDLK_q:
-                        // Quit the game with a keystroke
-                        game_is_running = false;
-                        break;
-                    case SDLK_LEFT:
-                        state.player->set_acceleration(glm::vec3(-50.0f, -0.49f, 0.0f));
-                        break;
-                    case SDLK_RIGHT:
-                        state.player->set_acceleration(glm::vec3(50.0f, -0.49f, 0.0f));
-                        break;
-                        
-                    default:
-                        break;
-                }
-            case SDL_KEYUP:
-                switch (event.key.keysym.sym) {
-                    default:
-                        break;
-                }
-                
-            default:
-                break;
+        if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
+            game_is_running = false;
         }
+        if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+                case SDLK_q:
+                    game_is_running = false;
+                    break;
+                case SDLK_LEFT:
+                    curr_x_accel = -50.0f;
+                    start_ticks = ticks;
+                    state.player->set_acceleration(glm::vec3(curr_x_accel, -0.49f, 0.0f));
+                    
+                    break;
+                case SDLK_RIGHT:
+                    curr_x_accel = 50.0f;
+                    start_ticks = ticks;
+                    state.player->set_acceleration(glm::vec3(curr_x_accel, -0.49f, 0.0f));
+                    break;
+                case SDLK_UP:
+                    state.player->set_acceleration(glm::vec3(curr_x_accel, 2.00f, 0.0f));
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+        if (event.type == SDL_KEYUP) {
+            switch (event.key.keysym.sym) {
+                case SDLK_q:
+                    game_is_running = false;
+                    break;
+                case SDLK_LEFT:
+                   // state.player->set_acceleration(glm::vec3(0.0f, -0.49f, 0.0f));
+                    break;
+                case SDLK_RIGHT:
+                   // state.player->set_acceleration(glm::vec3(00.0f, -0.49f, 0.0f));
+                    break;
+                case SDLK_UP:
+                  //  state.player->set_acceleration(glm::vec3(curr_x_accel, 0.00f, 0.0f));
+                    break;
+                default:
+                    break;
+            }
+
+            
+        }
+
     }
     
     const Uint8 *key_state = SDL_GetKeyboardState(NULL);
@@ -258,11 +341,11 @@ void process_input()
         state.player->animation_indices = state.player->walking[state.player->RIGHT];
     }
     
-//    if (key_state[SDL_SCANCODE_UP])
-//    {
-//        state.player->movement.y = 1.0f;
-//        state.player->animation_indices = state.player->walking[state.player->UP];
-//    }
+    if (key_state[SDL_SCANCODE_UP])
+    {
+        state.player->movement.y = 1.0f;
+        state.player->animation_indices = state.player->walking[state.player->UP];
+    }
 //    else if (key_state[SDL_SCANCODE_DOWN])
 //    {
 //        state.player->movement.y = -1.0f;
@@ -291,9 +374,11 @@ void update()
     }
     for (int i = 0; i < PLATFORM_COUNT; ++i) {
         if (state.player->check_collision(&state.platforms[i])) {
-            std::cout << "MISSION SUCCESSFUL!!!" << std::endl;
+        
+       std::cout << "MISSION SUCCESSFUL!!!" << std::endl;
             win = true;
         }
+        
         
     }
     for (int i = 0; i < ROCK_COUNT; ++i) {
@@ -309,6 +394,9 @@ void update()
     else {
         state.player->update(FIXED_TIMESTEP, state.losing_platforms, ROCK_COUNT);
         one = true;
+    }
+    if (win) {
+        DrawText(&program, text_texture_id, "Mission Successful", 0.5f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f), 16);
     }
     
     while (delta_time >= FIXED_TIMESTEP) {

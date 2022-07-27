@@ -56,7 +56,6 @@ public:
     // Methods
     Entity();
     ~Entity();
-    void DrawText(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position, int FONTBANK_SIZE);
     void draw_sprite_from_texture_atlas(ShaderProgram *program, GLuint texture_id, int index);
     void update(float delta_time, Entity *collidable_entities, int collidable_entity_count);
     void render(ShaderProgram *program);
