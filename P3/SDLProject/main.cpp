@@ -8,6 +8,7 @@
 float start_ticks = 0.0f;
 bool one = false;
 bool win;
+bool stop;
 float curr_x_accel = 0.0f, curr_y_acceleration = 0.0f;
 #ifdef _WINDOWS
 #include <GL/glew.h>
@@ -26,6 +27,7 @@ float curr_x_accel = 0.0f, curr_y_acceleration = 0.0f;
 #include <iostream>
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 #include <ctime> // time header
 
@@ -395,9 +397,6 @@ void update()
         state.player->update(FIXED_TIMESTEP, state.losing_platforms, ROCK_COUNT);
         one = true;
     }
-    if (win) {
-        DrawText(&program, text_texture_id, "Mission Successful", 0.5f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f), 16);
-    }
     
     while (delta_time >= FIXED_TIMESTEP) {
         // Update. Notice it's FIXED_TIMESTEP. Not deltaTime
@@ -416,6 +415,19 @@ void render()
     for (int i = 0; i < PLATFORM_COUNT; i++) state.platforms[i].render(&program);
     for (int i = 0; i < ROCK_COUNT; i++) state.losing_platforms[i].render(&program);
     
+    for (int i = 0; i < PLATFORM_COUNT; ++i) {
+        if (state.player->check_collision(&state.platforms[i])) {
+            DrawText(&program, text_texture_id, "YOU WIN", 1.0f, 0.000005f, glm::vec3(-3.0f, 0.0f, 0.0f), 16);
+        }
+        
+        
+    }
+    for (int i = 0; i < ROCK_COUNT; ++i) {
+        if (state.player->check_collision(&state.losing_platforms[i])) {
+            DrawText(&program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(-3.0f, 0.0f, 0.0f), 16);
+        }
+    }
+    
     SDL_GL_SwapWindow(display_window);
 }
 
@@ -430,7 +442,10 @@ void shutdown()
 int main(int argc, char* argv[])
 {
     initialise();
-
+    
+    
+    string hellen = "andre";
+    cout << hellen << endl;
     
     while (game_is_running)
     {
