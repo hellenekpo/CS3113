@@ -232,7 +232,6 @@ void render()
 {
     program.SetViewMatrix(view_matrix);
     glClear(GL_COLOR_BUFFER_BIT);
- 
     glUseProgram(program.programID);
     current_scene->render(&program);
     effects->render();

@@ -339,3 +339,12 @@ bool const Entity::check_collision(Entity *other) const
     
     return x_distance < 0.0f && y_distance < 0.0f;
 }
+
+bool Entity::check_x(Entity *other) {
+    float x_distance = fabs(position.x - other->position.x) - ((width  + other->width)  / 2.0f);
+    return x_distance < 0.0f;
+}
+bool Entity::check_y(Entity *other) {
+    float y_distance = fabs(position.y - other->position.y) - ((height + other->height) / 2.0f);
+    return y_distance < 0.0f;
+}

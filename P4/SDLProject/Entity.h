@@ -77,6 +77,8 @@ public:
     void const check_collision_x(Map *map);
     
     bool const check_collision(Entity *other) const;
+    bool  check_y(Entity *other);
+    bool  check_x(Entity *other);
     
     void activate()   { is_active = true;  };
     void deactivate() { is_active = false; };
