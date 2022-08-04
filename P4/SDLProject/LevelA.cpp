@@ -2,6 +2,7 @@
 #include "Utility.h"
 #define FIXED_TIMESTEP 0.0166666f
 bool state_game = false;
+bool win = false;
 GLuint text_texture_id;
 const char TEXT_PATH[] = "font1.png";
 #define LEVEL_WIDTH 14
@@ -99,7 +100,10 @@ void LevelA::update(float delta_time)
     this->state.enemies->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
     if (this->state.player->get_position().y < -10.0f) state.next_scene_id = 1;
     if (this->state.player->check_x(&state.enemies[0])) {
-        std::cout << "we in here" << std::endl;
+        state_game = true;
+    }
+    else if (this->state.player->check_y(&state.enemies[0])) {
+       win = true;
     }
 
 }
@@ -173,6 +177,10 @@ void LevelA::render(ShaderProgram *program)
     this->state.enemies->render(program);
     if (state_game) {
         this->DrawText(program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
-        std::cout<<state.enemies->collided_left<<std::endl;
+
+    }
+    else if (win) {
+      //  this->DrawText(program, text_texture_id, "YOU WIN", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+
     }
 }

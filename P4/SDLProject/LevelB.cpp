@@ -1,10 +1,4 @@
-//
-//  LevelB.cpp
-//  SDLProject
-//
-//  Created by Nathan Atherley on 8/3/22.
-//  Copyright © 2022 ctg. All rights reserved.
-//
+
 
 #include "LevelB.h"
 #include "Utility.h"
