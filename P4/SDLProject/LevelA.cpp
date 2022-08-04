@@ -74,7 +74,7 @@ void LevelA::initialise()
     state.enemies[0].set_ai_type(GUARD);
     state.enemies[0].set_ai_state(IDLE);
     state.enemies[0].texture_id = enemy_texture_id;
-    state.enemies[0].set_position(glm::vec3(3.0f, 0.0f, 0.0f));
+    state.enemies[0].set_position(glm::vec3(5.0f, 0.0f, 0.0f));
     state.enemies[0].set_movement(glm::vec3(0.0f));
     state.enemies[0].speed = 1.0f;
     state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
@@ -95,10 +95,9 @@ void LevelA::initialise()
 void LevelA::update(float delta_time)
 {
     this->state.player->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
-    
-    if (this->state.player->get_position().y < -10.0f) state.next_scene_id = 1;
+    this->state.enemies->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
+    //if (this->state.player->get_position().y < -10.0f) state.next_scene_id = 1;
 
-    
 }
 
 void LevelA::render(ShaderProgram *program)
