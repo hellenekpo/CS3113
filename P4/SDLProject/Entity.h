@@ -59,6 +59,14 @@ public:
     bool collided_bottom = false;
     bool collided_left   = false;
     bool collided_right  = false;
+    bool collided_with_enemy_bottom = false;
+    bool collided_with_enemy_top = false;
+    bool collided_with_enemy_left = false;
+    bool collided_with_enemy_right = false;
+    bool collided_with_player_bottom = false;
+    bool collided_with_player_top = false;
+    bool collided_with_player_left = false;
+    bool collided_with_player_right = false;
 
     // Methods
     Entity();

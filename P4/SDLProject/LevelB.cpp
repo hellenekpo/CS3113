@@ -1,21 +1,20 @@
 
-
 #include "LevelB.h"
 #include "Utility.h"
-
+const char TEXT_PATH1[] = "font1.png";
 #define LEVEL_WIDTH 14
 #define LEVEL_HEIGHT 8
 
 unsigned int LEVELB_DATA[] =
 {
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2,
-    3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2,
-    3, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 2, 2, 2,
-    3, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2
+    6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3,
+    6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,16, 7,
+    6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,16, 4, 7,
+    6, 0, 0, 0, 0, 0, 0, 0, 0, 0,16, 4, 4, 7,
+    6, 0, 0, 0, 0, 0, 0, 0, 0,16, 4, 4, 4, 7,
+    6,16, 1, 1, 1, 1, 2, 0,16, 4, 4, 4, 4, 7,
+    6, 4, 5, 5, 5, 5, 6, 0, 4, 4, 4, 4, 4, 7
 };
 
 LevelB::~LevelB()
@@ -31,8 +30,8 @@ void LevelB::initialise()
 {
     state.next_scene_id = -1;
     
-    GLuint map_texture_id = Utility::load_texture("tileset.png");
-    this->state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELB_DATA, map_texture_id, 1.0f, 4, 1);
+    GLuint map_texture_id = Utility::load_texture("tile.png");
+    this->state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELB_DATA, map_texture_id, 1.0f, 4.5, 4);
     
     // Code from main.cpp's initialise()
     /**

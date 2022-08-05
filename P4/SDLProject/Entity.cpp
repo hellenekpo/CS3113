@@ -97,7 +97,7 @@ void Entity::ai_guard(Entity *player)
 {
     switch (ai_state) {
         case IDLE:
-            if (glm::distance(position, player->position) < 1.0f) ai_state = WALKING;
+            if (glm::distance(position, player->position) < 3.0f) ai_state = WALKING;
             break;
             
         case WALKING:
@@ -186,10 +186,24 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
             float y_distance = fabs(position.y - collidable_entity->position.y);
             float y_overlap = fabs(y_distance - (height / 2.0f) - (collidable_entity->height / 2.0f));
             if (velocity.y > 0) {
+                if (collidable_entities->entity_type == ENEMY) {
+                    collided_with_enemy_top = true;
+                }
+                else if (collidable_entities->entity_type == PLAYER) {
+                    std::cout << "youre winning1" << std::endl;
+                    collided_with_player_top = true;
+                }
                 position.y   -= y_overlap;
                 velocity.y    = 0;
                 collided_top  = true;
             } else if (velocity.y < 0) {
+                
+                if (collidable_entities->entity_type == ENEMY) {
+                    collided_with_enemy_bottom = true;
+                }
+                else if (collidable_entities->entity_type == PLAYER) {
+                    collided_with_player_bottom = true;
+                }
                 position.y      += y_overlap;
                 velocity.y       = 0;
                 collided_bottom  = true;
@@ -199,7 +213,7 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
 }
 
 void const Entity::check_collision_x(Entity *collidable_entities, int collidable_entity_count)
-{
+{ 
     for (int i = 0; i < collidable_entity_count; i++)
     {
         Entity *collidable_entity = &collidable_entities[i];
@@ -209,10 +223,24 @@ void const Entity::check_collision_x(Entity *collidable_entities, int collidable
             float x_distance = fabs(position.x - collidable_entity->position.x);
             float x_overlap = fabs(x_distance - (width / 2.0f) - (collidable_entity->width / 2.0f));
             if (velocity.x > 0) {
+                std::cout << "youre losing" << std::endl;
+                if (collidable_entities->entity_type == ENEMY) {
+                    collided_with_enemy_right = true;
+                }
+                else if (collidable_entities->entity_type == PLAYER) {
+                    collided_with_player_right = true;
+                }
                 position.x     -= x_overlap;
                 velocity.x      = 0;
                 collided_right  = true;
             } else if (velocity.x < 0) {
+                std::cout << "youre losing" << std::endl;
+                if (collidable_entities->entity_type == ENEMY) {
+                    collided_with_enemy_left = true;
+                }
+                else if (collidable_entities->entity_type == PLAYER) {
+                    collided_with_player_left = true;
+                }
                 position.x    += x_overlap;
                 velocity.x     = 0;
                 collided_left  = true;
@@ -341,10 +369,9 @@ bool const Entity::check_collision(Entity *other) const
 }
 
 bool Entity::check_x(Entity *other) {
-    float x_distance = fabs(position.x - other->position.x) - ((width  + other->width)  / 2.0f);
-    return x_distance < 0.0f;
+        
+    return false;
 }
 bool Entity::check_y(Entity *other) {
-    float y_distance = fabs(position.y - other->position.y) - ((height + other->height) / 2.0f);
-    return y_distance < 0.0f;
+    return false;
 }

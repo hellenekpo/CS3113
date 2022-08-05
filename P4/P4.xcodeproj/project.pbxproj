@@ -33,6 +33,9 @@
 		EB576F6D289B55590024071C /* LevelC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB576F63289B55590024071C /* LevelC.cpp */; };
 		EB576F6E289B5D5F0024071C /* tileset.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F4C289B55580024071C /* tileset.png */; };
 		EB576F70289B658A0024071C /* tile.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F6F289B658A0024071C /* tile.png */; };
+		EB576F74289CB1B10024071C /* zombie.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F71289CB1B10024071C /* zombie.png */; };
+		EB576F75289CB1B10024071C /* zelda.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F72289CB1B10024071C /* zelda.png */; };
+		EB576F76289CB1B10024071C /* wormenemy.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F73289CB1B10024071C /* wormenemy.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +45,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
+				EB576F74289CB1B10024071C /* zombie.png in Copy Files */,
+				EB576F75289CB1B10024071C /* zelda.png in Copy Files */,
+				EB576F76289CB1B10024071C /* wormenemy.png in Copy Files */,
 				EB576F70289B658A0024071C /* tile.png in Copy Files */,
 				EB576F6E289B5D5F0024071C /* tileset.png in Copy Files */,
 				EB4677712887899E00C590CD /* rock.png in Copy Files */,
@@ -105,6 +111,9 @@
 		EB576F61289B55590024071C /* font1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font1.png; sourceTree = "<group>"; };
 		EB576F63289B55590024071C /* LevelC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelC.cpp; sourceTree = "<group>"; };
 		EB576F6F289B658A0024071C /* tile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tile.png; path = SDLProject/tile.png; sourceTree = "<group>"; };
+		EB576F71289CB1B10024071C /* zombie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zombie.png; sourceTree = "<group>"; };
+		EB576F72289CB1B10024071C /* zelda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zelda.png; sourceTree = "<group>"; };
+		EB576F73289CB1B10024071C /* wormenemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wormenemy.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +135,9 @@
 		DBDF1B462323DE3F007CECB1 = {
 			isa = PBXGroup;
 			children = (
+				EB576F73289CB1B10024071C /* wormenemy.png */,
+				EB576F72289CB1B10024071C /* zelda.png */,
+				EB576F71289CB1B10024071C /* zombie.png */,
 				EB576F6F289B658A0024071C /* tile.png */,
 				EB4677702887899E00C590CD /* rock.png */,
 				EB46776E288788BD00C590CD /* platform.png */,

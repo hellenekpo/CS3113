@@ -13,11 +13,11 @@ unsigned int LEVELA_DATA[] =
     6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    6, 0, 0, 15, 15, 15, 0, 0, 0, 3, 0, 0, 0, 0,
-   6, 0, 0, 0, 0, 0, 0, 0, 16, 7, 2, 0, 0, 0,
-    6, 0 , 0, 0, 0, 0, 0, 15, 4, 7, 6, 1, 1, 1,
-    6, 16, 1, 1, 1, 1, 1, 2, 4, 7, 6, 5, 5, 5,
-    6, 4, 5, 5, 5, 5, 5, 6, 4, 11, 6, 5, 5, 5
+    6, 0, 0, 12,13,14,0, 0, 0, 3, 0, 0, 0, 0,
+    6, 0, 0, 0, 0, 0, 0, 0, 16,7, 2, 0, 0, 0,
+    6, 0 ,0, 0, 0, 0, 0, 15,4, 7, 6, 16, 1, 2,
+    6, 16,1, 1, 1, 1, 1, 2, 4, 7, 6, 4, 5, 6,
+    6, 4, 5, 5, 5, 5, 5, 6, 4, 11,6, 4, 5, 6
 };
 
 LevelA::~LevelA()
@@ -69,7 +69,7 @@ void LevelA::initialise()
     
     /**
      Enemies' stuff */
-    GLuint enemy_texture_id = Utility::load_texture("soph.png");
+    GLuint enemy_texture_id = Utility::load_texture("wormenemy.png");
     
     state.enemies = new Entity[this->ENEMY_COUNT];
     state.enemies[0].set_entity_type(ENEMY);
@@ -97,13 +97,16 @@ void LevelA::initialise()
 void LevelA::update(float delta_time)
 {
     this->state.player->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
-    this->state.enemies->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
+    this->state.enemies->update(delta_time, state.player, state.player, this->ENEMY_COUNT, this->state.map);
     if (this->state.player->get_position().y < -10.0f) state.next_scene_id = 1;
-    if (this->state.player->check_x(&state.enemies[0])) {
-        state_game = true;
+    if (this->state.player->collided_with_enemy_bottom) {
+        win = true;
+        state_game = false;
     }
-    else if (this->state.player->check_y(&state.enemies[0])) {
-       win = true;
+     if ((this->state.player->collided_with_enemy_right && this->state.enemies->collided_with_player_left)
+      ||(this->state.player->collided_with_enemy_left  && this->state.enemies->collided_with_player_right ))  {
+        state_game = true;
+        win = false;
     }
 
 }
@@ -179,8 +182,6 @@ void LevelA::render(ShaderProgram *program)
         this->DrawText(program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
 
     }
-    else if (win) {
-      //  this->DrawText(program, text_texture_id, "YOU WIN", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+    if (win) this->DrawText(program, text_texture_id, "YOU WIN", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
 
-    }
 }
