@@ -124,6 +124,14 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     collided_bottom = false;
     collided_left   = false;
     collided_right  = false;
+    collided_with_enemy_bottom = false;
+    collided_with_enemy_top = false;
+    collided_with_enemy_left = false;
+    collided_with_enemy_right = false;
+    collided_with_player_bottom = false;
+    collided_with_player_top = false;
+    collided_with_player_left = false;
+    collided_with_player_right = false;
     
     if (entity_type == ENEMY) activate_ai(player);
     

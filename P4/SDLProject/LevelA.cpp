@@ -103,8 +103,8 @@ void LevelA::update(float delta_time)
         win = true;
         state_game = false;
     }
-     if ((this->state.player->collided_with_enemy_right && this->state.enemies->collided_with_player_left)
-      ||(this->state.player->collided_with_enemy_left  && this->state.enemies->collided_with_player_right ))  {
+     if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
+      ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
         state_game = true;
         win = false;
     }

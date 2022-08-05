@@ -209,7 +209,7 @@ void update()
         
         delta_time -= FIXED_TIMESTEP;
     }
-    
+     
     accumulator = delta_time;
     
     // Prevent the camera from showing anything outside of the "edge" of the level
