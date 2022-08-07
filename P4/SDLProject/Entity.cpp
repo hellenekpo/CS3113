@@ -198,7 +198,7 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
                     collided_with_enemy_top = true;
                 }
                 else if (collidable_entities->entity_type == PLAYER) {
-                    std::cout << "youre winning1" << std::endl;
+                    std::cout << "youre winning via enemy" << std::endl;
                     collided_with_player_top = true;
                 }
                 position.y   -= y_overlap;
@@ -207,6 +207,7 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
             } else if (velocity.y < 0) {
                 
                 if (collidable_entities->entity_type == ENEMY) {
+                    std::cout << "youre winning via player" << std::endl;
                     collided_with_enemy_bottom = true;
                 }
                 else if (collidable_entities->entity_type == PLAYER) {

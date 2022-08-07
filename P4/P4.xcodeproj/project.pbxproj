@@ -77,6 +77,7 @@
 		DBDF1B662323DEEA007CECB1 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		DBDF1B672323DEEA007CECB1 /* SDL2_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_image.framework; path = ../../../../../Library/Frameworks/SDL2_image.framework; sourceTree = "<group>"; };
 		DBDF1B682323DEEA007CECB1 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
+		EB101ED728A024BC003EF260 /* zombie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zombie.png; path = ../../zombie.png; sourceTree = "<group>"; };
 		EB46776128863B2900C590CD /* font1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font1.png; path = "../../../Downloads/SDLProject (Lunar Lander)/Assets/font1.png"; sourceTree = "<group>"; };
 		EB46776228863B2900C590CD /* soph.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = soph.png; path = "../../../Downloads/SDLProject (Lunar Lander)/Assets/soph.png"; sourceTree = "<group>"; };
 		EB46776328863B2900C590CD /* george_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = george_0.png; path = "../../../Downloads/SDLProject (Lunar Lander)/Assets/george_0.png"; sourceTree = "<group>"; };
@@ -135,6 +136,7 @@
 		DBDF1B462323DE3F007CECB1 = {
 			isa = PBXGroup;
 			children = (
+				EB101ED728A024BC003EF260 /* zombie.png */,
 				EB576F73289CB1B10024071C /* wormenemy.png */,
 				EB576F72289CB1B10024071C /* zelda.png */,
 				EB576F71289CB1B10024071C /* zombie.png */,

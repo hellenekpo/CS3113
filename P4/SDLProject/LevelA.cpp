@@ -102,6 +102,7 @@ void LevelA::update(float delta_time)
     if (this->state.player->collided_with_enemy_bottom) {
         win = true;
         state_game = false;
+
     }
      if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
       ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
@@ -176,12 +177,20 @@ void LevelA::DrawText(ShaderProgram *program, GLuint font_texture_id, std::strin
 void LevelA::render(ShaderProgram *program)
 {
     this->state.map->render(program);
-    this->state.player->render(program);
-    this->state.enemies->render(program);
+   if (!win) {
+        this->state.enemies->render(program);
+    }
+
+        this->state.player->render(program);
     if (state_game) {
         this->DrawText(program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
 
     }
-    if (win) this->DrawText(program, text_texture_id, "YOU WIN", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+    if (win) {
+        state.enemies[0].set_ai_type(GUARD);
+        state.enemies[0].set_ai_state(IDLE);
+        this->DrawText(program, text_texture_id, "ENEMY DEFEATED", 0.5f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+        this->DrawText(program, text_texture_id, "MOVE TO THE RIGHT FOR LEVEL 2", 0.5f, 0.005f, glm::vec3(1.0f, -6.0f, 0.0f), 16);
 
+    }
 }
