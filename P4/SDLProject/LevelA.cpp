@@ -67,6 +67,7 @@ void LevelA::initialise()
     // Jumping
     state.player->jumping_power = 5.0f;
     
+    
     /**
      Enemies' stuff */
     GLuint enemy_texture_id = Utility::load_texture("wormenemy.png");
@@ -74,12 +75,15 @@ void LevelA::initialise()
     state.enemies = new Entity[this->ENEMY_COUNT];
     state.enemies[0].set_entity_type(ENEMY);
     state.enemies[0].set_ai_type(GUARD);
-    state.enemies[0].set_ai_state(IDLE);
+    state.enemies[0].set_ai_state(JUMPING);
     state.enemies[0].texture_id = enemy_texture_id;
     state.enemies[0].set_position(glm::vec3(2.0f, 0.0f, 0.0f));
     state.enemies[0].set_movement(glm::vec3(0.0f));
     state.enemies[0].speed = 1.0f;
     state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+    state.enemies[0].jumping_power = 3.0f;
+    state.enemies[0].set_height(0.8f);
+    state.enemies[0].set_width(0.8f);
     text_texture_id = Utility::load_texture(TEXT_PATH);
     
     /**
@@ -102,12 +106,14 @@ void LevelA::update(float delta_time)
     if (this->state.player->collided_with_enemy_bottom) {
         win = true;
         state_game = false;
+        //this->state.enemies->deactivate();
 
     }
      if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
       ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
         state_game = true;
         win = false;
+         //this->state.player->deactivate();
     }
 
 }
@@ -187,8 +193,6 @@ void LevelA::render(ShaderProgram *program)
 
     }
     if (win) {
-        state.enemies[0].set_ai_type(GUARD);
-        state.enemies[0].set_ai_state(IDLE);
         this->DrawText(program, text_texture_id, "ENEMY DEFEATED", 0.5f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
         this->DrawText(program, text_texture_id, "MOVE TO THE RIGHT FOR LEVEL 2", 0.5f, 0.005f, glm::vec3(1.0f, -6.0f, 0.0f), 16);
 

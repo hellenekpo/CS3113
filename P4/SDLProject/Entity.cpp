@@ -111,6 +111,12 @@ void Entity::ai_guard(Entity *player)
         case ATTACKING:
             break;
             
+        case JUMPING:
+            is_jumping = true;
+            break;
+        
+            
+            
         default:
             break;
     }
@@ -174,7 +180,7 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     {
         // STEP 1: Immediately return the flag to its original false state
         is_jumping = false;
-        
+        std::cout << "in here" << std::endl;
         // STEP 2: The player now acquires an upward velocity
         velocity.y += jumping_power;
     }

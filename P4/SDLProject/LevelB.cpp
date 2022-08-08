@@ -100,6 +100,7 @@ void LevelB::update(float delta_time) { this->state.player->update(delta_time, s
     if (this->state.player->collided_with_enemy_bottom) {
         win1 = true;
         state_game1 = false;
+        this->state.enemies->deactivate();
 
     }
      if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
@@ -188,7 +189,7 @@ void LevelB::render(ShaderProgram *program)
         state.enemies[0].set_ai_type(GUARD);
         state.enemies[0].set_ai_state(IDLE);
         this->DrawText(program, text_texture_id1, "ENEMY DEFEATED", 0.5f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
-        this->DrawText(program, text_texture_id1, "MOVE TO THE RIGHT FOR LEVEL 2", 0.5f, 0.005f, glm::vec3(1.0f, -6.0f, 0.0f), 16);
+        this->DrawText(program, text_texture_id1, "MOVE TO THE RIGHT FOR LEVEL 3", 0.5f, 0.005f, glm::vec3(1.0f, -6.0f, 0.0f), 16);
 
     }
 

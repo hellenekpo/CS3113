@@ -2,8 +2,8 @@
 #include "Map.h"
 
 enum EntityType { PLATFORM, PLAYER, ENEMY  };
-enum AIType     { WALKER, GUARD            };
-enum AIState    { WALKING, IDLE, ATTACKING };
+enum AIType     { WALKER, GUARD, JUMPER       };
+enum AIState    { WALKING, IDLE, ATTACKING, JUMPING };
 
 class Entity
 {
