@@ -81,7 +81,6 @@ void LevelA::initialise()
     state.enemies[0].set_movement(glm::vec3(0.0f));
     state.enemies[0].speed = 1.0f;
     state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
-    state.enemies[0].jumping_power = 3.0f;
     state.enemies[0].set_height(0.8f);
     state.enemies[0].set_width(0.8f);
     text_texture_id = Utility::load_texture(TEXT_PATH);
