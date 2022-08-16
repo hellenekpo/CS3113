@@ -110,6 +110,7 @@ void initialise()
     // enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
 
     levelA = new LevelA();
     levelB = new LevelB();
