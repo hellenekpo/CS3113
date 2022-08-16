@@ -36,6 +36,7 @@
 		EB576F74289CB1B10024071C /* zombie.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F71289CB1B10024071C /* zombie.png */; };
 		EB576F75289CB1B10024071C /* zelda.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F72289CB1B10024071C /* zelda.png */; };
 		EB576F76289CB1B10024071C /* wormenemy.png in Copy Files */ = {isa = PBXBuildFile; fileRef = EB576F73289CB1B10024071C /* wormenemy.png */; };
+		EB6A601328AC1B7A00CABC67 /* TitleScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = EB6A601128AC1B7A00CABC67 /* TitleScreen.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -115,6 +116,8 @@
 		EB576F71289CB1B10024071C /* zombie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zombie.png; sourceTree = "<group>"; };
 		EB576F72289CB1B10024071C /* zelda.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zelda.png; sourceTree = "<group>"; };
 		EB576F73289CB1B10024071C /* wormenemy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wormenemy.png; sourceTree = "<group>"; };
+		EB6A601128AC1B7A00CABC67 /* TitleScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScreen.cpp; sourceTree = "<group>"; };
+		EB6A601228AC1B7A00CABC67 /* TitleScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScreen.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +168,8 @@
 		DBDF1B512323DE3F007CECB1 /* SDLProject */ = {
 			isa = PBXGroup;
 			children = (
+				EB6A601128AC1B7A00CABC67 /* TitleScreen.cpp */,
+				EB6A601228AC1B7A00CABC67 /* TitleScreen.h */,
 				EB576F50289B55590024071C /* bounce.wav */,
 				EB576F5A289B55590024071C /* dooblydoo.mp3 */,
 				EB576F4B289B55580024071C /* Effects.cpp */,
@@ -247,7 +252,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "P4" */;
+			buildConfigurationList = DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "P5" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -280,6 +285,7 @@
 				EB576F67289B55590024071C /* LevelB.cpp in Sources */,
 				EB46776A28863B8000C590CD /* Entity.cpp in Sources */,
 				DBDF1B5E2323DE8D007CECB1 /* ShaderProgram.cpp in Sources */,
+				EB6A601328AC1B7A00CABC67 /* TitleScreen.cpp in Sources */,
 				EB576F64289B55590024071C /* helper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,7 +455,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "P4" */ = {
+		DBDF1B4A2323DE3F007CECB1 /* Build configuration list for PBXProject "P5" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DBDF1B542323DE3F007CECB1 /* Debug */,
