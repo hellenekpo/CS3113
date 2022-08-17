@@ -198,21 +198,42 @@ void process_input()
     
     if (key_state[SDL_SCANCODE_UP])
     {
-        other_movement.y = 1.0f;
+        if (other_position.y < 2.753) {
+            other_movement.y = 1.0f;
+        }
+        else {
+            other_movement.y = 0.0f;
+        }
     
     }
     else if (key_state[SDL_SCANCODE_DOWN])
     {
-        other_movement.y = -1.0f;
+        if (other_position.y > -2.753) {
+            other_movement.y = -1.0f;
+        }
+        else {
+            other_movement.y = 0.0f;
+        }
     }
     
-    if (key_state[SDL_SCANCODE_A]) {
-        player_movement.y = 1.0f;
+    if (key_state[SDL_SCANCODE_A] && player_position.y < 2.753) {
+        if (player_position.y < 2.753) {
+            player_movement.y = 1.0f;
+        }
+        else {
+            player_movement.y = 0.0f;
+        }
+        std::cout << "player movement" << player_position.y << std::endl;
     }
     
-    else if (key_state[SDL_SCANCODE_Z]) {
-        
-        player_movement.y = -1.0f;
+    else if (key_state[SDL_SCANCODE_Z] && player_position.y > -2.753) {
+        if (player_position.y > -2.753) {
+            player_movement.y = -1.0f;
+        }
+        else {
+            player_movement.y = 0.0f;
+        }
+        std::cout << "player movement" << player_position.y << std::endl;
     }
     
     // This makes sure that the player can't move faster diagonally
@@ -258,10 +279,16 @@ void update()
 
     
     //Step 4
+    // if (other_position.x-0.3 <= ball_position.x <= other_position.x) {
+    //     if (other_position.y-0.3 <= ball_position.y <= other_position.y+0.3) {
+    //         ball_matrix = glm::translate(ball_matrix, glm::vec3(-triangle_x, 0.0f, 0.0f));
+    //     }
+    // }
     ball_matrix = glm::mat4(1.0f);
     ball_matrix = glm::translate(ball_matrix, glm::vec3(triangle_x, 0.0f, 0.0f));
     ball_matrix = glm::rotate(ball_matrix, glm::radians(triangle_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
     ball_matrix = glm::rotate(ball_matrix, glm::radians(-triangle_rotate), glm::vec3(0.0f, 0.0f, 1.0f));
+
 }
 
 void draw_object(glm::mat4 &object_model_matrix, GLuint &object_texture_id)
