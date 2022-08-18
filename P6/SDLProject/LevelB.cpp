@@ -100,6 +100,7 @@ void LevelB::update(float delta_time) { this->state.player->update(delta_time, s
     if (this->state.player->collided_with_enemy_bottom) {
         win1 = true;
         state_game1 = false;
+        points += 3;
         this->state.enemies->deactivate();
 
     }
@@ -107,7 +108,6 @@ void LevelB::update(float delta_time) { this->state.player->update(delta_time, s
       ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
         state_game1 = true;
         win1 = false;
-         lives -= 1;
     }
 }
 
@@ -177,9 +177,9 @@ void LevelB::DrawText(ShaderProgram *program, GLuint font_texture_id, std::strin
 void LevelB::render(ShaderProgram *program)
 {
     this->state.map->render(program);
-    this->DrawText(program, text_texture_id1, "Lives", .5f, 0.005f, glm::vec3(1.0f, -1.0f, 0.0f), 16);
+    this->DrawText(program, text_texture_id1, "Points", .5f, 0.005f, glm::vec3(1.0f, -1.0f, 0.0f), 16);
     std::stringstream stream;
-    stream << lives;
+    stream << points;
     std::string str;
     stream >> str;
     this->DrawText(program, text_texture_id1, str, .5f, 0.005f, glm::vec3(1.0f, -2.0f, 0.0f), 16);
@@ -192,7 +192,7 @@ void LevelB::render(ShaderProgram *program)
         //this->DrawText(program, text_texture_id1, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
 
     }
-    if (lives <= 0) {
+    if (points <= 0) {
         this->DrawText(program, text_texture_id1, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
     }
     if (win1) {

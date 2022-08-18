@@ -189,7 +189,7 @@ void Entity::update(float delta_time, Entity *player, Entity *objects, int objec
     model_matrix = glm::translate(model_matrix, position);
 }
 
-void const Entity::check_collision_y(Entity *collidable_entities, int collidable_entity_count)
+int const Entity::check_collision_y(Entity *collidable_entities, int collidable_entity_count)
 {
     for (int i = 0; i < collidable_entity_count; i++)
     {
@@ -200,24 +200,28 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
             float y_distance = fabs(position.y - collidable_entity->position.y);
             float y_overlap = fabs(y_distance - (height / 2.0f) - (collidable_entity->height / 2.0f));
             if (velocity.y > 0) {
-                if (collidable_entities->entity_type == ENEMY) {
+                if (collidable_entities[i].entity_type == ENEMY) {
                     collided_with_enemy_top = true;
+                    //return i;
                 }
-                else if (collidable_entities->entity_type == PLAYER) {
+                else if (collidable_entities[i].entity_type == PLAYER) {
                     std::cout << "youre winning via enemy" << std::endl;
                     collided_with_player_top = true;
+                    //return i;
                 }
                 position.y   -= y_overlap;
                 velocity.y    = 0;
                 collided_top  = true;
             } else if (velocity.y < 0) {
                 
-                if (collidable_entities->entity_type == ENEMY) {
+                if (collidable_entities[i].entity_type == ENEMY) {
                     std::cout << "youre winning via player" << std::endl;
                     collided_with_enemy_bottom = true;
+                    return i;
                 }
-                else if (collidable_entities->entity_type == PLAYER) {
+                else if (collidable_entities[i].entity_type == PLAYER) {
                     collided_with_player_bottom = true;
+                    //return i;
                 }
                 position.y      += y_overlap;
                 velocity.y       = 0;
@@ -225,6 +229,7 @@ void const Entity::check_collision_y(Entity *collidable_entities, int collidable
             }
         }
     }
+    return -1;
 }
 
 void const Entity::check_collision_x(Entity *collidable_entities, int collidable_entity_count)

@@ -8,7 +8,6 @@ enum AIState    { WALKING, IDLE, ATTACKING, JUMPING };
 class Entity
 {
 private:
-    bool is_active = true;
     EntityType entity_type;
     AIType ai_type;
     AIState ai_state;
@@ -26,6 +25,7 @@ private:
     float height = 0.8f;
     
 public:
+    bool is_active = true;
     // Static attributes
     static const int SECONDS_PER_FRAME = 4;
     static const int LEFT  = 0,
@@ -79,7 +79,7 @@ public:
     void ai_walker();
     void ai_guard(Entity *player);
     
-    void const check_collision_y(Entity *collidable_entities, int collidable_entity_count);
+    int const check_collision_y(Entity *collidable_entities, int collidable_entity_count);
     void const check_collision_x(Entity *collidable_entities, int collidable_entity_count);
     void const check_collision_y(Map *map);
     void const check_collision_x(Map *map);

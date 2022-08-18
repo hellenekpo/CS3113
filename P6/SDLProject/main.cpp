@@ -175,7 +175,7 @@ void process_input()
 
     if (key_state[SDL_SCANCODE_LEFT])
     {
-        current_scene->state.player->movement.x = -1.0f;
+         current_scene->state.player->movement.x = -1.0f;
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->LEFT];
     }
     else if (key_state[SDL_SCANCODE_RIGHT])
@@ -229,11 +229,11 @@ void update()
     }
     
     if (current_scene == levelA && current_scene->state.player->get_position().y < -10.0f) {
-        levelB->lives = levelA->lives;
+        levelB->points = levelA->points;
         switch_to_scene(levelB);
     }
     if (current_scene == levelB && current_scene->state.player->get_position().y < -10.0f) {
-        levelC->lives = levelB->lives;
+        levelC->points = levelB->points;
         switch_to_scene(levelC);
     }
     
