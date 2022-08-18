@@ -27,17 +27,15 @@
 #include "LevelB.h"
 #include "LevelC.h"
 #include "Effects.h"
+#include "TitleScreen.h"
 
 /**
  CONSTANTS
  */
-const int WINDOW_WIDTH  = 640,
-          WINDOW_HEIGHT = 480;
+const int WINDOW_WIDTH = 1240;
+const int WINDOW_HEIGHT = 900;
 
-const float BG_RED     = 0.1922f,
-            BG_BLUE    = 0.549f,
-            BG_GREEN   = 0.9059f,
-            BG_OPACITY = 1.0f;
+const float BG_RED = 1.0f, BG_BLUE = 0.7216f, BG_GREEN = 0.7765f, BG_OPACITY = 1.0f;
 
 const int VIEWPORT_X = 0,
           VIEWPORT_Y = 0,
@@ -56,10 +54,11 @@ Scene *current_scene;
 LevelA *levelA;
 LevelB *levelB;
 LevelC *levelC;
+TitleScreen *titleScreen;
 
 Effects *effects;
 
-Scene *levels[3];
+Scene *levels[4];
 
 SDL_Window* display_window;
 bool game_is_running = true;
@@ -110,14 +109,16 @@ void initialise()
     // enable blending
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    
+    titleScreen = new TitleScreen();
     levelA = new LevelA();
     levelB = new LevelB();
     levelC = new LevelC();
     
-    levels[0] = levelA;
-    levels[1] = levelB;
-    levels[2] = levelC;
+    levels[0] = titleScreen;
+    levels[1] = levelA;
+    levels[2] = levelB;
+    levels[3] = levelC;
     switch_to_scene(levels[0]);
     
     effects = new Effects(projection_matrix, view_matrix);
@@ -127,7 +128,9 @@ void initialise()
 void process_input()
 {
     // VERY IMPORTANT: If nothing is pressed, we don't want to go anywhere
-    current_scene->state.player->set_movement(glm::vec3(0.0f));
+    if (current_scene == levelA || current_scene == levelB || current_scene == levelC) {
+        current_scene->state.player->set_movement(glm::vec3(0.0f));
+    }
     
     SDL_Event event;
     while (SDL_PollEvent(&event))
@@ -148,12 +151,16 @@ void process_input()
                         
                     case SDLK_SPACE:
                         // Jump
-                        if (current_scene->state.player->collided_bottom)
+                        if (current_scene != titleScreen && current_scene->state.player->collided_bottom)
                         {
                             current_scene->state.player->is_jumping = true;
                             Mix_PlayChannel(-1, current_scene->state.jump_sfx, 0);
                         }
                         break;
+                    case SDLK_RETURN:
+                        if (current_scene == titleScreen) {
+                            switch_to_scene(levelA);
+                        }
                         
                     default:
                         break;
@@ -177,7 +184,7 @@ void process_input()
         current_scene->state.player->animation_indices = current_scene->state.player->walking[current_scene->state.player->RIGHT];
     }
     
-    if (glm::length(current_scene->state.player->movement) > 1.0f)
+    if (current_scene != titleScreen && glm::length(current_scene->state.player->movement) > 1.0f)
     {
         current_scene->state.player->movement = glm::normalize(current_scene->state.player->movement);
     }
@@ -203,9 +210,9 @@ void update()
         current_scene->update(FIXED_TIMESTEP);
         effects->update(FIXED_TIMESTEP);
         
-        if (is_colliding_bottom == false && current_scene->state.player->collided_bottom) effects->start(SHAKE, 1.0f);
+        if (current_scene != titleScreen && is_colliding_bottom == false && current_scene->state.player->collided_bottom) effects->start(SHAKE, 1.0f);
         
-        is_colliding_bottom = current_scene->state.player->collided_bottom;
+        if (current_scene != titleScreen) is_colliding_bottom = current_scene->state.player->collided_bottom;
         
         delta_time -= FIXED_TIMESTEP;
     }
@@ -215,15 +222,20 @@ void update()
     // Prevent the camera from showing anything outside of the "edge" of the level
     view_matrix = glm::mat4(1.0f);
     
-    if (current_scene->state.player->get_position().x > LEVEL1_LEFT_EDGE) {
+    if (current_scene != titleScreen && current_scene->state.player->get_position().x > LEVEL1_LEFT_EDGE) {
         view_matrix = glm::translate(view_matrix, glm::vec3(-current_scene->state.player->get_position().x, 3.75, 0));
     } else {
         view_matrix = glm::translate(view_matrix, glm::vec3(-5, 3.75, 0));
     }
     
-    if (current_scene == levelA && current_scene->state.player->get_position().y < -10.0f) switch_to_scene(levelB);
-    
-    if (current_scene == levelB && current_scene->state.player->get_position().y < -10.0f) switch_to_scene(levelC);
+    if (current_scene == levelA && current_scene->state.player->get_position().y < -10.0f) {
+        levelB->lives = levelA->lives;
+        switch_to_scene(levelB);
+    }
+    if (current_scene == levelB && current_scene->state.player->get_position().y < -10.0f) {
+        levelC->lives = levelB->lives;
+        switch_to_scene(levelC);
+    }
     
     view_matrix = glm::translate(view_matrix, effects->view_offset);
 }

@@ -3,10 +3,12 @@
 #define FIXED_TIMESTEP 0.0166666f
 bool state_game = false;
 bool win = false;
+int lives = 3;
 GLuint text_texture_id;
 const char TEXT_PATH[] = "font1.png";
 #define LEVEL_WIDTH 14
 #define LEVEL_HEIGHT 8
+#include <sstream>
 
 unsigned int LEVELA_DATA[] =
 {
@@ -108,10 +110,12 @@ void LevelA::update(float delta_time)
         //this->state.enemies->deactivate();
 
     }
+
      if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
       ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
         state_game = true;
         win = false;
+         lives -= 1;
          //this->state.player->deactivate();
     }
 
@@ -182,13 +186,22 @@ void LevelA::DrawText(ShaderProgram *program, GLuint font_texture_id, std::strin
 void LevelA::render(ShaderProgram *program)
 {
     this->state.map->render(program);
+    this->DrawText(program, text_texture_id, "Lives", .5f, 0.005f, glm::vec3(1.0f, -1.0f, 0.0f), 16);
+    std::stringstream stream;
+    stream << lives;
+    std::string str;
+    stream >> str;
+    this->DrawText(program, text_texture_id, str, .5f, 0.005f, glm::vec3(1.0f, -2.0f, 0.0f), 16);
    if (!win) {
         this->state.enemies->render(program);
     }
-
-        this->state.player->render(program);
-    if (state_game) {
+    if (lives <= 0) {
         this->DrawText(program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+    }
+
+         this->state.player->render(program);
+    if (state_game) {
+        //this->DrawText(program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
 
     }
     if (win) {
