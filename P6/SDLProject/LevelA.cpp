@@ -8,6 +8,7 @@ const char TEXT_PATH[] = "font1.png";
 #define LEVEL_WIDTH 14
 #define LEVEL_HEIGHT 8
 #include <sstream>
+
 unsigned int LEVELA_DATA[] =
 {
     6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -122,7 +123,7 @@ void LevelA::initialise()
     
     state.bgm = Mix_LoadMUS("dooblydoo.mp3");
     Mix_PlayMusic(state.bgm, -1);
-    Mix_VolumeMusic(0.0f);
+    Mix_VolumeMusic(MIX_MAX_VOLUME/2);
     
     state.jump_sfx = Mix_LoadWAV("bounce.wav");
 }
@@ -154,10 +155,6 @@ void LevelA::update(float delta_time)
 
     }
 
-     if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
-      ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
-         //this->state.player->deactivate();
-    }
 
 }
 void LevelA::DrawText(ShaderProgram *program, GLuint font_texture_id, std::string text, float screen_size, float spacing, glm::vec3 position, int FONTBANK_SIZE)

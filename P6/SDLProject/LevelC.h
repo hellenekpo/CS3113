@@ -4,8 +4,9 @@
 
 class LevelC : public Scene {
 public:
-    int ENEMY_COUNT = 5;
+    int ENEMY_COUNT = 2;
     int points;
+    int time2 = 800;
     ~LevelC();
     
     void initialise() override;

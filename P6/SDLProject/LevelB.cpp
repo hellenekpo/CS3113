@@ -1,4 +1,3 @@
-
 #include "LevelB.h"
 #include "Utility.h"
 GLuint text_texture_id1;
@@ -7,6 +6,7 @@ bool state_game1 = false;
 bool win1 = false;
 #define LEVEL_WIDTH 14
 #define LEVEL_HEIGHT 8
+#include <sstream>
 
 unsigned int LEVELB_DATA[] =
 {
@@ -80,6 +80,30 @@ void LevelB::initialise()
     state.enemies[0].set_movement(glm::vec3(0.0f));
     state.enemies[0].speed = 1.0f;
     state.enemies[0].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+    state.enemies[1].set_entity_type(ENEMY);
+    state.enemies[1].set_ai_type(GUARD);
+    state.enemies[1].set_ai_state(IDLE);
+    state.enemies[1].texture_id = enemy_texture_id;
+    state.enemies[1].set_position(glm::vec3(7.0f, 0.0f, 0.0f));
+    state.enemies[1].set_movement(glm::vec3(0.0f));
+    state.enemies[1].speed = 1.0f;
+    state.enemies[1].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+    state.enemies[2].set_entity_type(ENEMY);
+    state.enemies[2].set_ai_type(GUARD);
+    state.enemies[2].set_ai_state(IDLE);
+    state.enemies[2].texture_id = enemy_texture_id;
+    state.enemies[2].set_position(glm::vec3(9.0f, 0.0f, 0.0f));
+    state.enemies[2].set_movement(glm::vec3(0.0f));
+    state.enemies[2].speed = 1.0f;
+    state.enemies[2].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
+    state.enemies[3].set_entity_type(ENEMY);
+    state.enemies[3].set_ai_type(GUARD);
+    state.enemies[3].set_ai_state(IDLE);
+    state.enemies[3].texture_id = enemy_texture_id;
+    state.enemies[3].set_position(glm::vec3(10.0f, 0.0f, 0.0f));
+    state.enemies[3].set_movement(glm::vec3(0.0f));
+    state.enemies[3].speed = 1.0f;
+    state.enemies[3].set_acceleration(glm::vec3(0.0f, -9.81f, 0.0f));
     text_texture_id1 = Utility::load_texture(TEXT_PATH1);
     
     /**
@@ -94,20 +118,30 @@ void LevelB::initialise()
     state.jump_sfx = Mix_LoadWAV("bounce.wav");
 }
 
-void LevelB::update(float delta_time) { this->state.player->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
-    this->state.enemies->update(delta_time, state.player, state.player, this->ENEMY_COUNT, this->state.map);
+void LevelB::update(float delta_time) {
+    time2 = time2 - delta_time;
+    this->state.player->update(delta_time, state.player, state.enemies, this->ENEMY_COUNT, this->state.map);
+    this->state.enemies[0].update(delta_time, state.player, state.player, this->ENEMY_COUNT, this->state.map);
+    this->state.enemies[1].update(delta_time, state.player, state.player, this->ENEMY_COUNT, this->state.map);
+    this->state.enemies[2].update(delta_time, state.player, state.player, this->ENEMY_COUNT, this->state.map);
+    this->state.enemies[3].update(delta_time, state.player, state.player, this->ENEMY_COUNT, this->state.map);
     if (this->state.player->get_position().y < -10.0f) state.next_scene_id = 1;
     if (this->state.player->collided_with_enemy_bottom) {
-        win1 = true;
-        state_game1 = false;
         points += 3;
-        this->state.enemies->deactivate();
+        std::cout << this->state.player->check_collision_y(this->state.enemies, 4) << std::endl;
+        if (this->state.player->check_collision_y(this->state.enemies, 4) == 1) {
+            this->state.enemies[1].deactivate();
+        }
+        else if (this->state.player->check_collision_y(this->state.enemies, 4) == 2) {
+            this->state.enemies[2].deactivate();
+        }
+        else if (this->state.player->check_collision_y(this->state.enemies, 4) == 3) {
+            this->state.enemies[3].deactivate();
+        }
+        else if (this->state.player->check_collision_y(this->state.enemies, 4) == 0) {
+            this->state.enemies[0].deactivate();
+        }
 
-    }
-     if ((this->state.player->collided_with_enemy_right || this->state.enemies->collided_with_player_left)
-      ||(this->state.player->collided_with_enemy_left || this->state.enemies->collided_with_player_right ))  {
-        state_game1 = true;
-        win1 = false;
     }
 }
 
@@ -176,29 +210,36 @@ void LevelB::DrawText(ShaderProgram *program, GLuint font_texture_id, std::strin
 
 void LevelB::render(ShaderProgram *program)
 {
+    
     this->state.map->render(program);
-    this->DrawText(program, text_texture_id1, "Points", .5f, 0.005f, glm::vec3(1.0f, -1.0f, 0.0f), 16);
+    this->state.enemies[0].render(program);
+    this->state.enemies[1].render(program);
+    this->state.enemies[2].render(program);
+    this->state.enemies[3].render(program);
+    this->DrawText(program, text_texture_id1, "Points", .5f, 0.005f, glm::vec3(1.0f, -0.5f, 0.0f), 16);
+    this->DrawText(program, text_texture_id1, "Time", .5f, 0.005f, glm::vec3(3.0f, -0.5f, 0.0f), 16);
     std::stringstream stream;
+    std::stringstream stream1;
     stream << points;
+    stream1 << time2;
     std::string str;
+    std::string str1;
     stream >> str;
-    this->DrawText(program, text_texture_id1, str, .5f, 0.005f, glm::vec3(1.0f, -2.0f, 0.0f), 16);
-   if (!win1) {
-        this->state.enemies->render(program);
-    }
+    stream1 >> str1;
+    this->DrawText(program, text_texture_id1, str, .5f, 0.005f, glm::vec3(1.0f, -1.5f, 0.0f), 16);
+    this->DrawText(program, text_texture_id1, str1, .5f, 0.005f, glm::vec3(3.0f, -1.5f, 0.0f), 16);
 
-        this->state.player->render(program);
-    if (state_game1) {
-        //this->DrawText(program, text_texture_id1, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
-
-    }
-    if (points <= 0) {
+    if (time2 <= 0 && !win1) {
         this->DrawText(program, text_texture_id1, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
     }
+
+         this->state.player->render(program);
+        //this->DrawText(program, text_texture_id, "YOU LOSE", 1.0f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+    if (!state.enemies[0].is_active && !state.enemies[1].is_active && !state.enemies[2].is_active && !state.enemies[3].is_active && time2 > 0) {
+        win1 = true;
+    }
     if (win1) {
-        state.enemies[0].set_ai_type(GUARD);
-        state.enemies[0].set_ai_state(IDLE);
-        this->DrawText(program, text_texture_id1, "ENEMY DEFEATED", 0.5f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
+        this->DrawText(program, text_texture_id1, "ENEMIES DEFEATED", 0.5f, 0.005f, glm::vec3(1.0f, -5.0f, 0.0f), 16);
         this->DrawText(program, text_texture_id1, "MOVE TO THE RIGHT FOR LEVEL 3", 0.5f, 0.005f, glm::vec3(1.0f, -6.0f, 0.0f), 16);
 
     }
